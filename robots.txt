@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alintibi.github.io/p7s-universal-viewer/sitemap.xml
