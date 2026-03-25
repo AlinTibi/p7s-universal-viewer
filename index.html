@@ -4,119 +4,1160 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Open P7S File - Free P7S Viewer for Windows</title>
-
-  <meta name="description" content="Open .p7s files easily with this free P7S Viewer for Windows. View and extract content from signed files in seconds." />
-  <meta name="keywords" content="open p7s file, p7s viewer, p7s reader windows, extract p7s, smime viewer" />
-  <meta name="robots" content="index, follow" />
+  <title>Open P7S File on Windows - Free P7S Viewer & Extractor</title>
+  <meta name="description" content="Open .p7s files on Windows with a free P7S Viewer. View signed files, extract embedded PDF, Word, Excel, XML or images, and access the real content easily." />
+  <meta name="keywords" content="open p7s file, p7s viewer, p7s extractor, how to open p7s, p7s reader windows, extract p7s file, smime viewer, pkcs7 viewer, signed file viewer, open signed attachment" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="author" content="AlinTibi" />
+  <meta name="theme-color" content="#0f172a" />
 
   <link rel="canonical" href="https://alintibi.github.io/p7s-universal-viewer/" />
-  <link rel="sitemap" type="application/xml" href="sitemap.xml" />
+  <link rel="icon" type="image/x-icon" href="p7s.ico" />
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://alintibi.github.io/p7s-universal-viewer/" />
+  <meta property="og:title" content="Open P7S File on Windows - Free P7S Viewer & Extractor" />
+  <meta property="og:description" content="Free Windows tool to open, view and extract .p7s files. Access the real content inside signed attachments and document containers." />
+  <meta property="og:image" content="https://alintibi.github.io/p7s-universal-viewer/pn1.png" />
+  <meta property="og:image:alt" content="P7S Viewer application screenshot" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Open P7S File on Windows - Free P7S Viewer & Extractor" />
+  <meta name="twitter:description" content="Free Windows tool to open, view and extract .p7s files easily." />
+  <meta name="twitter:image" content="https://alintibi.github.io/p7s-universal-viewer/pn1.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "P7S Universal Viewer",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free Windows tool to open, view and extract .p7s files, including signed attachments and embedded documents.",
+    "downloadUrl": "https://github.com/alintibi/p7s-universal-viewer/releases",
+    "url": "https://alintibi.github.io/p7s-universal-viewer/",
+    "image": "https://alintibi.github.io/p7s-universal-viewer/pn1.png",
+    "author": {
+      "@type": "Person",
+      "name": "AlinTibi"
+    }
+  }
+  </script>
 
   <style>
+    :root {
+      --bg: #0b1120;
+      --bg-soft: #0f172a;
+      --card: #111827;
+      --card-2: #162033;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: #243041;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #1f2937;
+      --secondary-hover: #334155;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --shadow: 0 14px 38px rgba(0, 0, 0, 0.28);
+      --radius: 18px;
+      --max: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: Arial;
-      background: #0f172a;
-      color: #e5e7eb;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.10), transparent 24%),
+        linear-gradient(180deg, #0a1020 0%, #0f172a 45%, #0b1120 100%);
+      color: var(--text);
+      line-height: 1.65;
     }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
-    h1, h2, h3 {
-      color: #fff;
-    }
-    .card {
-      background: #111827;
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
-    .btn {
-      display: inline-block;
-      background: #2563eb;
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 8px;
+
+    a {
+      color: #7cb3ff;
       text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(8, 13, 27, 0.82);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      box-shadow: var(--shadow);
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .nav a {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a:hover {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 52px 0 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .panel,
+    .card {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(17, 24, 39, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #bfdbfe;
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(96, 165, 250, 0.22);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: 46px;
+      line-height: 1.12;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p.lead {
+      margin: 0 0 24px;
+      font-size: 18px;
+      color: #cbd5e1;
+      max-width: 760px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 24px 0 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.2s ease;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.32);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-hover), #2563eb);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.95);
+      color: #fff;
+      border-color: rgba(148, 163, 184, 0.18);
+    }
+
+    .btn-secondary:hover {
+      background: var(--secondary-hover);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta-pill {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #dbeafe;
+      font-size: 13px;
+    }
+
+    .hero-side {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .side-box {
+      background: linear-gradient(180deg, rgba(22, 32, 51, 0.88), rgba(17, 24, 39, 0.88));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .side-box h3 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .side-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #dbeafe;
+    }
+
+    .side-list li {
+      margin-bottom: 8px;
+    }
+
+    .section {
+      padding: 14px 0;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      color: #fff;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      margin: 0 0 26px;
+      font-size: 16px;
+      max-width: 860px;
+    }
+
+    .grid-3,
+    .grid-2,
+    .grid-features,
+    .grid-screens {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-features {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-screens {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card,
+    .panel {
+      padding: 26px;
+    }
+
+    .card h2,
+    .card h3,
+    .panel h2,
+    .panel h3 {
+      color: #fff;
+      margin-top: 0;
+    }
+
+    .icon-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37, 99, 235, 0.14);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      color: #bfdbfe;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .feature-list,
+    .check-list,
+    .faq-list,
+    .step-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .feature-list li,
+    .check-list li,
+    .faq-list li,
+    .step-list li {
+      margin-bottom: 10px;
+    }
+
+    .step-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
       margin-top: 10px;
     }
-    .btn:hover {
-      background: #1d4ed8;
+
+    .step-card {
+      background: linear-gradient(180deg, rgba(22, 32, 51, 0.82), rgba(17, 24, 39, 0.92));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 168px;
+    }
+
+    .step-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .screenshot-card {
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .screenshot-card .shot-text {
+      padding: 18px 20px 20px;
+    }
+
+    .screenshot-card img {
+      width: 100%;
+      background: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .comparison {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    .comparison th,
+    .comparison td {
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .comparison th {
+      background: rgba(37, 99, 235, 0.12);
+      color: #fff;
+    }
+
+    .good {
+      color: #86efac;
+      font-weight: 700;
+    }
+
+    .mid {
+      color: #fde68a;
+      font-weight: 700;
+    }
+
+    .faq-item {
+      padding: 18px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .faq-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.18);
+      color: #dcfce7;
+      margin-top: 18px;
+    }
+
+    .warning-box {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.18);
+      color: #fef3c7;
+      margin-top: 18px;
+    }
+
+    .keyword-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .keyword-cloud span {
+      background: rgba(255, 255, 255, 0.04);
+      color: #dbeafe;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .download-box {
+      text-align: center;
+      padding: 34px 26px;
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.12), rgba(17, 24, 39, 0.92));
+    }
+
+    .download-box h2 {
+      margin-bottom: 10px;
+    }
+
+    .download-box p {
+      max-width: 740px;
+      margin: 0 auto 20px;
+      color: #dbeafe;
+    }
+
+    .footer {
+      padding: 36px 0 60px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+    }
+
+    @media (max-width: 1060px) {
+      .hero-grid,
+      .grid-features,
+      .grid-3,
+      .grid-2,
+      .grid-screens,
+      .step-cards,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        padding-top: 26px;
+      }
+
+      .hero-card,
+      .hero-side,
+      .card,
+      .panel {
+        padding: 20px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .section-title {
+        font-size: 27px;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
     }
   </style>
 </head>
-
 <body>
-<div class="container">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">P7S</div>
+        <div>
+          P7S Universal Viewer
+          <small>Free Windows tool for .p7s files</small>
+        </div>
+      </div>
 
-  <h1>Open P7S File - Free P7S Viewer</h1>
+      <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#problems">Common problems</a>
+        <a href="#faq">FAQ</a>
+        <a href="#download">Download</a>
+      </nav>
+    </div>
+  </header>
 
-  <p>
-    Free tool to open, view and extract content from .p7s files on Windows.
-    Works with signed documents, email attachments and certificate files.
-  </p>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow">Open signed files, extract real content, no complex setup</div>
 
-  <a class="btn" href="https://github.com/alintibi/p7s-universal-viewer/releases" target="_blank">
-    Download P7S Viewer
-  </a>
+          <h1>Open P7S File on Windows with a Free P7S Viewer</h1>
 
-  <div class="card">
-    <h2>What is a .p7s file?</h2>
-    <p>
-      A .p7s file is a digitally signed file used in secure email systems and official documents.
-      Most users cannot open it directly without a special viewer.
-    </p>
-  </div>
+          <p class="lead">
+            P7S Universal Viewer is a free Windows tool that helps you open, inspect and extract content from
+            <strong>.p7s files</strong>. If you receive signed email attachments or digitally signed containers
+            and cannot see the real file inside, this viewer gives you a simple way to access the content.
+          </p>
 
-  <div class="card">
-    <h2>How to open a .p7s file in Windows</h2>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/alintibi/p7s-universal-viewer/releases" target="_blank" rel="noopener noreferrer">Download P7S Viewer</a>
+            <a class="btn btn-secondary" href="https://github.com/alintibi/p7s-universal-viewer" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          </div>
 
-    <p>
-      If you need to open a .p7s file, you usually cannot do it directly.
-      Most systems do not support these files without special tools.
-    </p>
+          <div class="hero-meta">
+            <div class="meta-pill">Free to use</div>
+            <div class="meta-pill">Built for Windows</div>
+            <div class="meta-pill">Open signed attachments</div>
+            <div class="meta-pill">Extract embedded files</div>
+          </div>
 
-    <p>
-      With this P7S Viewer, you can open and extract the real content inside.
-      It may include PDF, Word, Excel or image files.
-    </p>
+          <div class="notice">
+            <div>✔</div>
+            <div>
+              If Windows does not know how to open your <strong>.p7s</strong> file, this usually means the real
+              document is stored inside a signed container and needs a dedicated viewer or extractor.
+            </div>
+          </div>
+        </div>
 
-    <h3>Steps to open a .p7s file</h3>
+        <aside class="hero-side hero-card">
+          <div class="side-box">
+            <h3>Best for</h3>
+            <ul class="side-list">
+              <li>Signed email attachments</li>
+              <li>Digitally signed documents</li>
+              <li>PKCS#7 / S/MIME style containers</li>
+              <li>Users who just want the real file inside</li>
+            </ul>
+          </div>
 
-    <ol>
-      <li>Download the P7S Viewer</li>
-      <li>Open the application</li>
-      <li>Select your .p7s file</li>
-      <li>Extract or view the content</li>
-    </ol>
-  </div>
+          <div class="side-box">
+            <h3>Can help you extract</h3>
+            <ul class="side-list">
+              <li>PDF files</li>
+              <li>Word documents</li>
+              <li>Excel files</li>
+              <li>XML documents</li>
+              <li>Images and other embedded files</li>
+            </ul>
+          </div>
 
-  <div class="card">
-    <h2>Main Features</h2>
-    <ul>
-      <li>Open .p7s files</li>
-      <li>Extract real content</li>
-      <li>Simple and fast interface</li>
-      <li>Free to use</li>
-    </ul>
-  </div>
+          <div class="side-box">
+            <h3>Why people search for this</h3>
+            <ul class="side-list">
+              <li>How to open p7s file</li>
+              <li>P7S viewer Windows</li>
+              <li>Open signed attachment</li>
+              <li>Extract content from p7s file</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
 
-  <div class="card">
-    <h2>FAQ</h2>
+    <section class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">What is a .p7s file?</h2>
+          <p class="section-subtitle">
+            A <strong>.p7s file</strong> is commonly used for digital signatures and secure document exchange.
+            In many cases it is not a normal document by itself, but a signed container related to email systems,
+            certificates or official document workflows. That is why double-clicking the file often does not show
+            the actual content you expect.
+          </p>
 
-    <h3>Can I open a .p7s file for free?</h3>
-    <p>Yes, this tool is completely free.</p>
+          <div class="grid-3">
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">📄</div>
+                <h3>Signed container</h3>
+              </div>
+              <p>
+                A .p7s file often stores signature-related data around a document or attachment rather than acting
+                like a regular PDF or Word file.
+              </p>
+            </div>
 
-    <h3>Does it work on Windows?</h3>
-    <p>Yes, it is built for Windows.</p>
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">🔐</div>
+                <h3>Security format</h3>
+              </div>
+              <p>
+                These files are often associated with digital signatures, secure email attachments and document
+                verification workflows.
+              </p>
+            </div>
 
-    <h3>What can be inside a .p7s file?</h3>
-    <p>PDF, Word, Excel, XML, images or signed data.</p>
-  </div>
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">📦</div>
+                <h3>Real content inside</h3>
+              </div>
+              <p>
+                The file you actually need may be embedded inside the .p7s container, such as PDF, Word, Excel,
+                XML or image content.
+              </p>
+            </div>
+          </div>
 
-</div>
+          <div class="warning-box">
+            <div>!</div>
+            <div>
+              If your .p7s file appears empty or unreadable, that does not necessarily mean it is broken.
+              It often means you need to extract the actual document from the signed container first.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">Main features of P7S Universal Viewer</h2>
+          <p class="section-subtitle">
+            This tool is designed to solve the real problem users have: opening a .p7s file and getting the real content
+            out quickly, without dealing with complicated command line tools or certificate utilities.
+          </p>
+
+          <div class="grid-features">
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">📂</div>
+                <h3>Open .p7s files</h3>
+              </div>
+              <p>Load and inspect .p7s files on Windows through a simple interface.</p>
+            </div>
+
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">🧩</div>
+                <h3>Extract real content</h3>
+              </div>
+              <p>Access the actual files stored inside the signed container.</p>
+            </div>
+
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">⚡</div>
+                <h3>Simple workflow</h3>
+              </div>
+              <p>No advanced OpenSSL knowledge required for normal use.</p>
+            </div>
+
+            <div class="card">
+              <div class="icon-title">
+                <div class="icon">💻</div>
+                <h3>Windows focused</h3>
+              </div>
+              <p>Built specifically for Windows users who need a practical solution.</p>
+            </div>
+          </div>
+
+          <div class="keyword-cloud">
+            <span>open p7s file</span>
+            <span>p7s viewer</span>
+            <span>p7s extractor</span>
+            <span>p7s reader windows</span>
+            <span>extract signed attachment</span>
+            <span>open pkcs7 file</span>
+            <span>view p7s file</span>
+            <span>smime attachment viewer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">How to open a .p7s file in Windows</h2>
+          <p class="section-subtitle">
+            If you need to open a .p7s file, the easiest approach is to use a viewer that can read the signed
+            container and extract the real content from it.
+          </p>
+
+          <div class="step-cards">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Download the viewer</h3>
+              <p>Get the latest version from the GitHub release page.</p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Open the application</h3>
+              <p>Launch the viewer on your Windows PC.</p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>Select the .p7s file</h3>
+              <p>Choose the signed file you received by email or from a document workflow.</p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <h3>View or extract content</h3>
+              <p>Inspect the signed data and extract the embedded PDF, Word, Excel, XML or image file.</p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <h3>Why this works better than a default file open</h3>
+            <p>
+              Windows usually does not know how to display .p7s files as user-facing documents.
+              A dedicated viewer understands the signed container and can reveal the real content.
+            </p>
+            <ul class="check-list">
+              <li>Useful for non-technical users</li>
+              <li>Avoids manual command line steps</li>
+              <li>Helps when a PDF or document is hidden inside the signed file</li>
+              <li>Good for quick access to the real content</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">Screenshots</h2>
+          <p class="section-subtitle">
+            Example application screens showing how the viewer can help with signed files and embedded content.
+          </p>
+
+          <div class="grid-screens">
+            <div class="card screenshot-card">
+              <img src="pn1.png" alt="P7S Universal Viewer main screen" />
+              <div class="shot-text">
+                <h3>Main window</h3>
+                <p class="muted">Open a .p7s file and inspect its data through a simple Windows interface.</p>
+              </div>
+            </div>
+
+            <div class="card screenshot-card">
+              <img src="pn2.png" alt="P7S Universal Viewer secondary screen" />
+              <div class="shot-text">
+                <h3>Content and extraction workflow</h3>
+                <p class="muted">Review file information and access the actual document stored inside the container.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problems" class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">Common problems with .p7s files</h2>
+          <p class="section-subtitle">
+            These are the most frequent reasons people search for a P7S viewer or extractor.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>The file does not open</h3>
+              <p>
+                This usually happens because Windows does not treat a .p7s file as a normal document format.
+                A dedicated viewer is needed to read or extract the content.
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>The .p7s file looks empty</h3>
+              <p>
+                The visible file may only represent signed data. The real file inside may need to be extracted first.
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>I expected a PDF but got .p7s</h3>
+              <p>
+                In many workflows, the PDF is wrapped in a signed container. You may need to open the .p7s file
+                to recover the PDF document.
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>I do not want command line tools</h3>
+              <p>
+                Tools like OpenSSL may work for advanced users, but many people simply need a Windows viewer that
+                can open the file and extract the content quickly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">What can be inside a .p7s file?</h2>
+          <p class="section-subtitle">
+            Depending on how the signed file was created, the content inside may include one or more document types.
+          </p>
+
+          <table class="comparison">
+            <thead>
+              <tr>
+                <th>Possible content</th>
+                <th>Typical use case</th>
+                <th>Why a viewer helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PDF documents</td>
+                <td>Signed invoices, forms, official files</td>
+                <td class="good">Extract and open the real PDF</td>
+              </tr>
+              <tr>
+                <td>Word documents</td>
+                <td>Signed editable documents</td>
+                <td class="good">Recover the embedded file</td>
+              </tr>
+              <tr>
+                <td>Excel files</td>
+                <td>Reports, spreadsheets, exports</td>
+                <td class="good">Access data inside the container</td>
+              </tr>
+              <tr>
+                <td>XML files</td>
+                <td>Structured documents and system exports</td>
+                <td class="good">Extract technical or business data</td>
+              </tr>
+              <tr>
+                <td>Images</td>
+                <td>Attached evidence, scans, signed visual content</td>
+                <td class="good">Open files without manual decoding</td>
+              </tr>
+              <tr>
+                <td>Signature data only</td>
+                <td>Verification-related information</td>
+                <td class="mid">Inspect the signed container more easily</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">Why use a viewer instead of only technical tools?</h2>
+          <p class="section-subtitle">
+            Technical tools can be powerful, but most users who search for “open p7s file” do not want to handle
+            command line syntax, certificates and structure dumps just to get a document out.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>Command line tools</h3>
+              <ul class="feature-list">
+                <li>Better for advanced technical users</li>
+                <li>May require extra syntax and format knowledge</li>
+                <li>Can be inconvenient for quick document access</li>
+                <li>Not ideal for everyday Windows users</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3>P7S Universal Viewer</h3>
+              <ul class="feature-list">
+                <li>Simple visual workflow</li>
+                <li>Focused on opening and extracting content</li>
+                <li>Useful for practical document access</li>
+                <li>Designed for people who just need results quickly</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">Frequently asked questions</h2>
+
+          <div class="faq-item">
+            <h3>Can I open a .p7s file for free?</h3>
+            <p>
+              Yes. This tool is intended to help users open and inspect .p7s files on Windows without paying for
+              enterprise certificate software.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Does this work on Windows?</h3>
+            <p>Yes. P7S Universal Viewer is focused on Windows users.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>What if my .p7s file contains a PDF?</h3>
+            <p>
+              That is a common case. The PDF may be embedded inside the signed container and can often be extracted
+              with a dedicated viewer.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Why can I not open .p7s directly?</h3>
+            <p>
+              Because many systems treat it as signed data, not as a normal end-user document format.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Can a .p7s file contain Word, Excel or XML files?</h3>
+            <p>Yes. Depending on how the signed container was created, these formats may be included.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Do I need OpenSSL to use this viewer?</h3>
+            <p>
+              No. The point of the viewer is to make the workflow easier for users who do not want to rely on
+              command line tools.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Is this useful for signed email attachments?</h3>
+            <p>
+              Yes. Many people encounter .p7s files after receiving signed email attachments and need a way to
+              extract the real content.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="panel">
+          <h2 class="section-title">Who is this tool for?</h2>
+          <div class="grid-3">
+            <div class="card">
+              <h3>Office users</h3>
+              <p>People who receive signed files and simply want the real PDF or document inside.</p>
+            </div>
+            <div class="card">
+              <h3>IT support</h3>
+              <p>Teams who need a practical way to help users open unfamiliar signed attachments.</p>
+            </div>
+            <div class="card">
+              <h3>Business workflows</h3>
+              <p>Anyone dealing with digitally signed forms, invoices, exports or official files.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="download" class="section">
+      <div class="container">
+        <div class="panel download-box">
+          <h2>Download P7S Universal Viewer</h2>
+          <p>
+            Get the latest Windows release and start opening .p7s files, extracting embedded content and accessing
+            signed documents more easily.
+          </p>
+          <div class="cta-row" style="justify-content:center;">
+            <a class="btn btn-primary" href="https://github.com/alintibi/p7s-universal-viewer/releases" target="_blank" rel="noopener noreferrer">Download Latest Release</a>
+            <a class="btn btn-secondary" href="https://github.com/alintibi/p7s-universal-viewer" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+          </div>
+          <p class="muted" style="margin-top:18px;">
+            Direct release page:
+            <a href="https://github.com/alintibi/p7s-universal-viewer/releases" target="_blank" rel="noopener noreferrer">
+              github.com/alintibi/p7s-universal-viewer/releases
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <strong style="color:#fff;">P7S Universal Viewer</strong>
+        <p class="muted">
+          Free Windows software for users who need to open .p7s files, inspect signed containers and extract the
+          real content inside.
+        </p>
+        <p class="muted">© 2026 AlinTibi. All rights reserved.</p>
+      </div>
+
+      <div>
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#how">How to open P7S</a>
+          <a href="#problems">Common problems</a>
+          <a href="#faq">FAQ</a>
+          <a href="#download">Download</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
