@@ -1,6 +1,6 @@
-# Release-candidate validation
+# V2.0.0 validation
 
-Validated on Windows on 2026-10-08. No public v2.0.0 release has been created. Synthetic signed fixtures were generated locally; no real customer documents or private signing keys are included in the repository.
+The checks below were performed on Windows on 2026-10-08 before publication. V2.0.0 is now publicly released; these results describe that validation session. Synthetic signed fixtures were generated locally; no real customer documents or private signing keys are included in the repository.
 
 Automated tests use generated demonstration certificates and harmless content. Coverage includes altered signatures, multiple signers, correct/wrong detached bytes, expired/self-signed certificates, malformed/empty input, resource limits, traversal, collisions, byte equality and preview cleanup.
 

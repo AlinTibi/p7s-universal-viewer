@@ -761,7 +761,7 @@
             <div>!</div>
             <div>
               If your .p7s file appears empty or unreadable, that does not necessarily mean it is broken.
-              It often means you need to extract the actual document from the signed container first.
+              An attached P7S may contain an embedded document to extract. A detached P7S does not contain the original document and requires its exact original bytes for verification.
             </div>
           </div>
         </div>
@@ -882,12 +882,12 @@
         <div class="panel">
           <h2 class="section-title">Screenshots</h2>
           <p class="section-subtitle">
-            Example application screens showing how the viewer can help with signed files and embedded content.
+            Legacy v1 screenshots, retained for reference. See the official product page above for current v2.0.0 screenshots.
           </p>
 
           <div class="grid-screens">
             <div class="card screenshot-card">
-              <img src="pn1.png" alt="P7S Universal Viewer main screen" />
+              <img src="pn1.png" alt="Legacy v1 P7S Universal Viewer main screen" />
               <div class="shot-text">
                 <h3>Main window</h3>
                 <p class="muted">Open a .p7s file and inspect its data through a simple Windows interface.</p>
@@ -895,7 +895,7 @@
             </div>
 
             <div class="card screenshot-card">
-              <img src="pn2.png" alt="P7S Universal Viewer secondary screen" />
+              <img src="pn2.png" alt="Legacy v1 P7S Universal Viewer secondary screen" />
               <div class="shot-text">
                 <h3>Content and extraction workflow</h3>
                 <p class="muted">Review file information and access the actual document stored inside the container.</p>
@@ -926,7 +926,7 @@
             <div class="card">
               <h3>The .p7s file looks empty</h3>
               <p>
-                The visible file may only represent signed data. The real file inside may need to be extracted first.
+                An attached signature may include a document to extract. A detached P7S contains no original document: obtain the exact original bytes separately and select that file in v2.0.0.
               </p>
             </div>
 
@@ -1061,6 +1061,11 @@
               That is a common case. The PDF may be embedded inside the signed container and can often be extracted
               with a dedicated viewer.
             </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Does every P7S contain the original document?</h3>
+            <p>An attached P7S may contain embedded content. A detached P7S does not contain the original document and requires the exact original bytes supplied separately. A modified or resaved copy may fail verification.</p>
           </div>
 
           <div class="faq-item">

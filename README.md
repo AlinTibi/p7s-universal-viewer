@@ -4,13 +4,15 @@ Open. Verify. Extract. Understand P7S files.
 
 P7S Universal Viewer is a free, open-source Windows utility for opening CMS/PKCS#7 signed files, extracting embedded content, verifying cryptographic signatures and inspecting signer certificates. Files are processed locally.
 
-## Release status
+Free and open source for Windows. **V2.0.0 is publicly released.**
 
-Version 2.0.0 is being prepared for review. It has not been published. [Existing releases](https://github.com/AlinTibi/p7s-universal-viewer/releases) remain available; the v1.0.0 installer is preserved unchanged. Its signature-list status can incorrectly display Valid for an altered payload; do not rely on that indicator.
+**[Download installer](https://github.com/AlinTibi/p7s-universal-viewer/releases/download/v2.0.0/P7SViewer_Setup-v2.0.0.exe)** · **[Portable ZIP](https://github.com/AlinTibi/p7s-universal-viewer/releases/download/v2.0.0/P7SUniversalViewer-v2.0.0-win-x64.zip)** · [Product page](https://almarfeld.com/software/p7s-universal-viewer/) · [Guide](https://almarfeld.com/guides/how-to-open-p7s-files-windows/)
+
+See [installation and SHA-256 verification](docs/INSTALLATION.md) before first run. The historical v1.0.0 installer remains available unchanged; its signature-list status can incorrectly display Valid for an altered payload. Do not rely on that indicator.
 
 ![Application showing synthetic signed content](docs/screenshots/main.png)
 
-### Real release-candidate screenshots
+### Real v2.0.0 screenshots
 
 All examples use synthetic documents and demonstration certificates; no customer files or private paths are shown.
 

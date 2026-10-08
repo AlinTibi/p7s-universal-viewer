@@ -1,8 +1,30 @@
 # Installation and migration
 
-V2.0.0 remains a release candidate. Installer and portable packages are built from the same self-contained Windows x64 publish directory; no separate .NET installation is needed.
+V2.0.0 is publicly released. Installer and portable packages are built from the same self-contained Windows x64 publish directory; no separate .NET installation is needed.
 
 The installer installs under the current user's local application data, creates a Start Menu shortcut, and optionally creates a desktop shortcut. It requires no administrator privileges. PDF preview uses the separately installed Microsoft Edge WebView2 Runtime; no runtime is downloaded or installed automatically.
+
+## Download and first run
+
+Download only from the [official v2.0.0 GitHub release](https://github.com/AlinTibi/p7s-universal-viewer/releases/tag/v2.0.0) or [ALMARFELD product page](https://almarfeld.com/software/p7s-universal-viewer/). Run `P7SViewer_Setup-v2.0.0.exe` for installation, or extract the portable ZIP and run `P7SUniversalViewer.exe`.
+
+The Windows binaries are not Authenticode signed. Windows may therefore show a reputation or security warning. A signed Git tag is not a Windows executable signature. Do not disable Windows security; if unsure about a download, stop and verify its source and checksum.
+
+## Verify SHA-256
+
+In PowerShell, open the folder containing your download and run the relevant command:
+
+```powershell
+Get-FileHash -Algorithm SHA256 .\P7SViewer_Setup-v2.0.0.exe
+Get-FileHash -Algorithm SHA256 .\P7SUniversalViewer-v2.0.0-win-x64.zip
+```
+
+Compare the `Hash` value with the matching value below (letter case does not matter):
+
+- Installer: `c13490b2493658e378828bb9d3526adf1ae2525b058364de2822d40306e69d53`
+- Portable ZIP: `78567c82f020215c623a07847098ec94f9cc418acfc64b4542fb1badffcbcac7`
+
+The release also provides `.sha256` files. A matching hash confirms the downloaded bytes match the published artifact; it is not a malware scan or an Authenticode signature. Do not run a file whose hash differs.
 
 ## Historical v1 installations
 
