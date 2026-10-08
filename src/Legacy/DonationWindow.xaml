@@ -1,0 +1,29 @@
+<Window x:Class="P7SExtractor.DonationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Donate" Height="300" Width="420" WindowStartupLocation="CenterOwner" Background="#1E293B">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="14,6"/>
+            <Setter Property="Background" Value="#5A8DFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#4877e6"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Padding="18" Background="#263445" CornerRadius="12" BorderBrush="#3A4A64" BorderThickness="1">
+        <StackPanel HorizontalAlignment="Stretch">
+            <TextBlock x:Name="lblTitle" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,8" TextAlignment="Center"/>
+            <TextBlock x:Name="txtDescription" Foreground="#DDE6F7" TextWrapping="Wrap" Margin="0,0,0,16" TextAlignment="Center"/>
+
+            <Button x:Name="btnDonate" Height="48" Margin="0,0,0,8" Background="#5A8DFF" Foreground="White" FontWeight="SemiBold" Click="BtnDonate_Click">Donează ❤️</Button>
+
+            <Button x:Name="btnLater" Height="36" Background="#374659" Foreground="White" Click="BtnLater_Click">Mai târziu</Button>
+        </StackPanel>
+    </Border>
+</Window>

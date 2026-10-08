@@ -1,0 +1,19 @@
+<Window x:Class="P7SExtractor.AmountPromptWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Amount" Height="160" Width="320" WindowStartupLocation="CenterOwner" Background="#1E293B">
+
+    <Border Padding="12" Background="#263445" CornerRadius="10" BorderBrush="#3A4A64" BorderThickness="1">
+        <StackPanel>
+            <TextBlock x:Name="lblPrompt" Text="" Foreground="White" Margin="0,0,0,8" FontWeight="SemiBold"/>
+            <DockPanel>
+                <TextBox x:Name="txtAmount" Width="160" Height="30" VerticalContentAlignment="Center"/>
+                <TextBlock Text="€" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="#DDE6F7"/>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                <Button x:Name="btnCancelAmt" Width="80" Click="BtnCancelAmt_Click" Background="#374659" Margin="6">Cancel</Button>
+                <Button x:Name="btnOkAmt" Width="80" Click="BtnOkAmt_Click" Margin="6">OK</Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>
