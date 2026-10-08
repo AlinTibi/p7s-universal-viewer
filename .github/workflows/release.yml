@@ -2,6 +2,12 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing signed stable release tag
+        required: true
+        type: string
 permissions:
   contents: read
 jobs:
@@ -12,22 +18,51 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
+          ref: main
           fetch-depth: 0
       - name: Require a signed stable tag on main
         shell: pwsh
+        env:
+          REQUESTED_TAG: ${{ inputs.tag }}
         run: |
-          $tag = $env:GITHUB_REF_NAME
+          $ErrorActionPreference = 'Stop'
+          $tag = switch ($env:GITHUB_EVENT_NAME) {
+            'push' {
+              if ($env:GITHUB_REF_TYPE -ne 'tag') { throw 'Push must reference a tag.' }
+              $env:GITHUB_REF_NAME
+            }
+            'workflow_dispatch' { $env:REQUESTED_TAG }
+            default { throw 'Unsupported release trigger.' }
+          }
           if ($tag -notmatch '^v\d+\.\d+\.\d+$') { throw 'Only stable versions may be released.' }
+          $tagRef = "refs/tags/$tag"
+          git fetch --force origin "${tagRef}:${tagRef}"
+          if ($LASTEXITCODE) { throw 'Remote tag fetch failed.' }
+          $tagObject = git rev-parse $tagRef
+          if ($LASTEXITCODE) { throw 'Tag object resolution failed.' }
+          $objectType = git cat-file -t $tagRef
+          if ($LASTEXITCODE -or $objectType -ne 'tag') { throw 'An annotated tag is required.' }
+          $tagContents = git cat-file tag $tagRef
+          if ($LASTEXITCODE -or $tagContents -notcontains '-----BEGIN SSH SIGNATURE-----') { throw 'An SSH-signed tag is required.' }
+          git config gpg.format ssh
+          if ($LASTEXITCODE) { throw 'SSH configuration failed.' }
+          git config gpg.ssh.allowedSignersFile .github/allowed_signers
+          if ($LASTEXITCODE) { throw 'Allowed signers configuration failed.' }
+          git verify-tag $tagRef
+          if ($LASTEXITCODE) { throw 'Tag signature verification failed.' }
+          $releaseCommit = git rev-list -n 1 $tagRef
+          if ($LASTEXITCODE -or $releaseCommit -notmatch '^[0-9a-f]{40}$') { throw 'Release commit resolution failed.' }
+          if ($tag -eq 'v2.0.0' -and ($tagObject -ne 'b93d61faaa54fe36584113cb0ca83f979a4a628b' -or $releaseCommit -ne 'b29bd7b0cc26c660ab76e34ad239af4ca5130432')) { throw 'Existing v2.0.0 tag must remain unchanged.' }
+          git merge-base --is-ancestor $releaseCommit origin/main
+          if ($LASTEXITCODE) { throw 'Release commit must belong to main.' }
+          git checkout --detach $releaseCommit
+          if ($LASTEXITCODE) { throw 'Release checkout failed.' }
           $version = ([xml](Get-Content Directory.Build.props -Raw)).Project.PropertyGroup.Version
           if ($tag -ne "v$version") { throw 'Tag and application version differ.' }
-          git config gpg.format ssh
-          git config gpg.ssh.allowedSignersFile .github/allowed_signers
-          git verify-tag $tag
-          if ($LASTEXITCODE) { throw 'Tag signature verification failed.' }
-          git merge-base --is-ancestor HEAD origin/main
-          if ($LASTEXITCODE) { throw 'Release commit must belong to main.' }
+          "RELEASE_TAG=$tag" >> $env:GITHUB_ENV
+          "RELEASE_COMMIT=$releaseCommit" >> $env:GITHUB_ENV
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           dotnet-version: 10.0.x
@@ -36,7 +71,7 @@ jobs:
       - run: dotnet test P7SUniversalViewer.slnx -c Release --no-build
       - name: Package installer and portable build
         shell: pwsh
-        run: ./scripts/package.ps1 -Version ($env:GITHUB_REF_NAME.Substring(1)) -ArtifactDirectory artifacts
+        run: ./scripts/package.ps1 -Version ($env:RELEASE_TAG.Substring(1)) -ArtifactDirectory artifacts
       - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
         with:
           subject-path: |
@@ -47,6 +82,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = $env:GITHUB_REF_NAME
+          $tag = $env:RELEASE_TAG
           gh release create $tag "artifacts/P7SUniversalViewer-$tag-win-x64.zip" "artifacts/P7SUniversalViewer-$tag-win-x64.zip.sha256" "artifacts/P7SViewer_Setup-$tag.exe" "artifacts/P7SViewer_Setup-$tag.exe.sha256" --verify-tag --title "P7S Universal Viewer $tag" --notes-file docs/RELEASE_NOTES.md
           if ($LASTEXITCODE) { throw 'Release publication failed.' }
