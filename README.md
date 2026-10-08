@@ -10,6 +10,15 @@ Version 2.0.0 is being prepared for review. It has not been published. [Existing
 
 ![Application showing synthetic signed content](docs/screenshots/main.png)
 
+### Real release-candidate screenshots
+
+All examples use synthetic documents and demonstration certificates; no customer files or private paths are shown.
+
+![PDF preview and signer certificate details](docs/screenshots/certificate-details.png)
+![Multiple independently checked signers](docs/screenshots/multiple-signers.png)
+![Detached signature requiring the original file](docs/screenshots/detached.png)
+![Altered content rejected in every status view](docs/screenshots/invalid.png)
+
 ## What is a P7S file?
 
 A P7S file usually contains a CMS/PKCS#7 signature. An attached signature includes the original document; a detached signature needs the exact original bytes supplied separately. This application supports both, with individual results for every signer.
@@ -48,6 +57,8 @@ pwsh ./scripts/package.ps1
 ```
 
 Packaging also requires Inno Setup 6. Installer and portable EXEs are not Authenticode signed. Source commits and release tags use SSH signing; this is separate from Windows executable signing.
+
+The v2 installer runs per user without administrator privileges. A historical machine-wide v1 installation can coexist with v2; it is not silently replaced. See [installation and migration](docs/INSTALLATION.md).
 
 See [security reporting](SECURITY.md), [support](SUPPORT.md), [contributing](CONTRIBUTING.md), [changes](CHANGELOG.md) and [validation](docs/VALIDATION.md).
 

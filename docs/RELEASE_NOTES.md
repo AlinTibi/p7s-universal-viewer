@@ -7,6 +7,7 @@ Open. Verify. Extract. Understand P7S files.
 - Separate certificate chain trust, current dates and revocation status.
 - Individual verification of multiple signers and explicit detached-original selection.
 - Bounded CMS parsing, safe filenames, collision-safe extraction and preview cleanup.
+- Reliable image preview after header inspection, covered by a real decoded-PNG regression test.
 - .NET 10 self-contained portable ZIP and per-user Inno installer, with SHA-256 checksums and build provenance.
 - Removes archive and Office parsing dependencies; unsupported content remains extractable.
 

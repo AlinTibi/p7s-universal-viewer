@@ -13,7 +13,10 @@ try {
     dotnet publish src/P7SUniversalViewer/P7SUniversalViewer.csproj -c Release -r win-x64 --self-contained true -o $publish -p:DebugType=None -p:DebugSymbols=false
     if ($LASTEXITCODE) { throw 'Publish failed.' }
     Get-ChildItem $publish -Filter *.xml -Recurse | Remove-Item
-    Copy-Item LICENSE,README.md,THIRD_PARTY_NOTICES.md -Destination $publish
+    Copy-Item LICENSE,README.md,THIRD_PARTY_NOTICES.md,SECURITY.md,SUPPORT.md,CONTRIBUTING.md,CHANGELOG.md -Destination $publish
+    New-Item -ItemType Directory -Path (Join-Path $publish 'docs/screenshots') -Force | Out-Null
+    Copy-Item docs/screenshots/*.png -Destination (Join-Path $publish 'docs/screenshots')
+    Copy-Item docs/INSTALLATION.md,docs/VALIDATION.md,docs/RELEASE_NOTES.md -Destination (Join-Path $publish 'docs')
     $runtimeVersion = (Get-Content (Join-Path $publish "P7SUniversalViewer.runtimeconfig.json") -Raw | ConvertFrom-Json).runtimeOptions.includedFrameworks[0].version
     $coreRuntime = Join-Path $env:USERPROFILE ".nuget/packages/microsoft.netcore.app.runtime.win-x64/$runtimeVersion"
     Copy-Item (Join-Path $coreRuntime "LICENSE.TXT") (Join-Path $publish "DOTNET-LICENSE.txt")

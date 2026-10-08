@@ -70,7 +70,7 @@ public partial class MainWindow : Window
             TextPreview.Text = Encoding.UTF8.GetString(bytes.AsSpan(0, Math.Min(bytes.Length, 512 * 1024))) + (bytes.Length > 512 * 1024 ? "\n[Preview limited to 512 KiB; extraction preserves all bytes.]" : "");
             TextPreview.Visibility = Visibility.Visible; PreviewNotice.Visibility = Visibility.Collapsed;
         } else if (type.Preview == PreviewKind.Image) {
-            try { using var stream = new MemoryStream(bytes); var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.DelayCreation, BitmapCacheOption.None); var frame = decoder.Frames[0]; if ((long)frame.PixelWidth * frame.PixelHeight > 40_000_000) throw new InvalidDataException("Image dimensions exceed the 40 megapixel preview limit."); var image = new BitmapImage(); image.BeginInit(); image.CacheOption = BitmapCacheOption.OnLoad; image.DecodePixelWidth = Math.Min(frame.PixelWidth, 1600); image.StreamSource = stream; image.EndInit(); image.Freeze(); ImagePreview.Source = image; ImagePreview.Visibility = Visibility.Visible; PreviewNotice.Visibility = Visibility.Collapsed; }
+            try { ImagePreview.Source = ImagePreviewLoader.Load(bytes); ImagePreview.Visibility = Visibility.Visible; PreviewNotice.Visibility = Visibility.Collapsed; }
             catch (Exception e) when (e is IOException or NotSupportedException or ArgumentException) { PreviewNotice.Text = "Image preview unavailable: " + e.Message; }
         } else if (type.Preview == PreviewKind.Pdf) {
             try {

@@ -5,6 +5,7 @@
 - Separates integrity, certificate trust, dates and revocation with one authoritative status model.
 - Checks every signer and supports detached signatures with explicit original-file selection.
 - Adds bounded CMS inspection, collision-safe extraction and owned temporary-preview cleanup.
+- Decodes image previews from a fresh stream after header inspection.
 - Introduces a three-panel WPF interface and a distinct document/certificate icon.
 - Uses .NET 10 and current cryptography/WebView2 packages; removes SharpCompress and Office parsing dependencies.
 - Prepares self-contained portable ZIP, Inno installer, checksums and provenance workflow.
