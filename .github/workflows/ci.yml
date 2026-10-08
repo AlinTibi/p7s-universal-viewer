@@ -1,0 +1,34 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore P7SUniversalViewer.slnx
+      - run: dotnet build P7SUniversalViewer.slnx -c Release --no-restore
+      - run: dotnet test P7SUniversalViewer.slnx -c Release --no-build --logger trx
+      - name: Dependency audit
+        shell: pwsh
+        run: |
+          dotnet list P7SUniversalViewer.slnx package --vulnerable --include-transitive --format json > audit.json
+          if ($LASTEXITCODE) { throw 'Dependency audit failed.' }
+          $audit = Get-Content audit.json -Raw | ConvertFrom-Json
+          foreach ($project in $audit.projects) {
+            foreach ($framework in $project.frameworks) {
+              foreach ($package in @($framework.topLevelPackages) + @($framework.transitivePackages)) {
+                foreach ($issue in $package.vulnerabilities) {
+                  if ($issue.severity -in @('High','Critical')) { throw "Vulnerable dependency: $($package.id)" }
+                }
+              }
+            }
+          }

@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/P7SUniversalViewer.Core/P7SUniversalViewer.Core.csproj" />
+    <Project Path="src/P7SUniversalViewer/P7SUniversalViewer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/P7SUniversalViewer.Tests/P7SUniversalViewer.Tests.csproj" />
+  </Folder>
+</Solution>

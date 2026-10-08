@@ -1,0 +1,14 @@
+name: Bug report
+description: Report a reproducible problem using synthetic content.
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: What happened, and how can it be reproduced?
+      description: Include application and Windows versions. Never attach private documents or keys.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result

@@ -1,0 +1,9 @@
+name: Feature request
+description: Suggest a useful local workflow improvement.
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Which problem would this solve?
+    validations:
+      required: true

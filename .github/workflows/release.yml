@@ -1,0 +1,52 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Require a signed stable tag on main
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          if ($tag -notmatch '^v\d+\.\d+\.\d+$') { throw 'Only stable versions may be released.' }
+          $version = ([xml](Get-Content Directory.Build.props -Raw)).Project.PropertyGroup.Version
+          if ($tag -ne "v$version") { throw 'Tag and application version differ.' }
+          git config gpg.format ssh
+          git config gpg.ssh.allowedSignersFile .github/allowed_signers
+          git verify-tag $tag
+          if ($LASTEXITCODE) { throw 'Tag signature verification failed.' }
+          git merge-base --is-ancestor HEAD origin/main
+          if ($LASTEXITCODE) { throw 'Release commit must belong to main.' }
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore P7SUniversalViewer.slnx
+      - run: dotnet build P7SUniversalViewer.slnx -c Release --no-restore
+      - run: dotnet test P7SUniversalViewer.slnx -c Release --no-build
+      - name: Package installer and portable build
+        shell: pwsh
+        run: ./scripts/package.ps1 -Version ($env:GITHUB_REF_NAME.Substring(1)) -ArtifactDirectory artifacts
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: |
+            artifacts/P7SUniversalViewer-v*-win-x64.zip
+            artifacts/P7SViewer_Setup-v*.exe
+      - name: Publish only completed assets
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          gh release create $tag "artifacts/P7SUniversalViewer-$tag-win-x64.zip" "artifacts/P7SUniversalViewer-$tag-win-x64.zip.sha256" "artifacts/P7SViewer_Setup-$tag.exe" "artifacts/P7SViewer_Setup-$tag.exe.sha256" --verify-tag --title "P7S Universal Viewer $tag" --notes-file docs/RELEASE_NOTES.md
+          if ($LASTEXITCODE) { throw 'Release publication failed.' }
