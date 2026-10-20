@@ -1,16 +1,10 @@
-# P7S Universal Viewer v2.0.0
+# P7S Universal Viewer v2.0.1
 
-Open. Verify. Extract. Understand P7S files.
+Security maintenance release for the existing P7S Universal Viewer v2 series.
 
-- Redesigned three-panel Windows interface and distinct document/certificate icon.
-- Corrected false Valid indicators: every view uses the same checked integrity result.
-- Separate certificate chain trust, current dates and revocation status.
-- Individual verification of multiple signers and explicit detached-original selection.
-- Bounded CMS parsing, safe filenames, collision-safe extraction and preview cleanup.
-- Reliable image preview after header inspection, covered by a real decoded-PNG regression test.
-- .NET 10 self-contained portable ZIP and per-user Inno installer, with SHA-256 checksums and build provenance.
-- Removes archive and Office parsing dependencies; unsupported content remains extractable.
+- Updates Microsoft's `System.Security.Cryptography.Pkcs` from 10.0.12 to 10.0.13, patched for the October 2026 advisories (GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7).
+- Keeps the redesigned three-panel Windows interface, detached-content support, per-signer checks, original-byte extraction and protective handling introduced in v2.0.0.
+- Aligns the legacy GitHub Pages homepage with the canonical ALMARFELD P7S product page.
+- Includes a self-contained Windows portable ZIP and per-user installer, with SHA-256 checksum files and workflow provenance; these artifacts must be rebuilt from the v2.0.1 signed tag.
 
-Revocation is not checked. Signing-time assertions and timestamp authority tokens do not establish trusted signing time. Cryptographic integrity does not establish legal validity or document safety. WebView2 is a separate optional dependency for PDF preview. No automatic runtime installation occurs.
-
-Windows EXE and installer are not Authenticode signed. Upgrading a legacy machine-wide installation may require manually uninstalling that old installation; user documents are not removed. The original v1.0.0 release remains unchanged.
+This patch does not add revocation checking or timestamp authority verification. Cryptographic integrity is not proof of legal validity or content safety. WebView2 is separate and optional for PDF preview. Windows installer and EXE are not Authenticode signed. The original historical releases remain available and unchanged; use v2.0.1 instead of v2.0.0 once it is published.

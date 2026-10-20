@@ -1,4 +1,4 @@
-param([string]$Version = '2.0.0', [string]$ArtifactDirectory = 'artifacts/final')
+param([string]$Version = '2.0.1', [string]$ArtifactDirectory = 'artifacts/final')
 $ErrorActionPreference = 'Stop'
 if ($Version -notmatch '^\d+\.\d+\.\d+$') { throw 'Stable numeric version required.' }
 $projectRoot = Split-Path $PSScriptRoot -Parent
