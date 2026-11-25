@@ -9,7 +9,12 @@ public sealed record VerificationReport(DateTimeOffset CheckedAtUtc, string Cont
     IReadOnlyList<SignerResult> Signers, string Guidance)
 {
     [JsonIgnore]
-    public string Summary => State == ContainerState.Ready ? Integrity.ToString() : State.ToString();
+    public string Summary => State switch
+    {
+        ContainerState.DetachedContentRequired => "Original required",
+        ContainerState.Ready => Integrity.ToString(),
+        _ => State.ToString()
+    };
 
     public static VerificationReport Create(string container, string? original, Inspection inspection) =>
         new(DateTimeOffset.UtcNow, Path.GetFileName(container),

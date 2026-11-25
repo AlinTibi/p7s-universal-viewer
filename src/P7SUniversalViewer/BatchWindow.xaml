@@ -1,5 +1,6 @@
 <Window x:Class="P7SUniversalViewer.BatchWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Batch verification — P7S Universal Viewer"
+        Background="#0D1520" Foreground="{StaticResource Ink}" FontFamily="Segoe UI" FontSize="13"
         Width="780" Height="490" MinWidth="550" MinHeight="350" WindowStartupLocation="CenterOwner">
     <DockPanel Margin="22">
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
@@ -17,6 +18,7 @@
             </WrapPanel>
         </StackPanel>
         <ListBox x:Name="Results" SelectionChanged="SelectionChanged" AutomationProperties.Name="Batch results">
+            <ListBox.ItemContainerStyle><Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}"><Setter Property="AutomationProperties.Name" Value="{Binding AccessibleName}"/></Style></ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
