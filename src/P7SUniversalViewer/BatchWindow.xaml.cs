@@ -103,5 +103,8 @@ public partial class BatchWindow : Window
     private async void SaveReport(object sender, RoutedEventArgs e) =>
         await MainWindow.SaveReport(this, "p7s-batch-report.json", rows.Select(row => row.Report).ToArray());
 
-    private sealed record Row(string Path, string? Original, VerificationReport Report);
+    private sealed record Row(string Path, string? Original, VerificationReport Report)
+    {
+        public string AccessibleName => $"{Report.Container}: {Report.Summary}";
+    }
 }
