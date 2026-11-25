@@ -10,11 +10,21 @@ public enum CertificateTrust { Unknown, Trusted, Untrusted }
 public enum CertificateDates { Unknown, Valid, Expired, NotYetValid }
 public enum Revocation { NotChecked, Good, Revoked, Unknown }
 public enum ContainerState { Ready, DetachedContentRequired, Unsupported, Error }
+public sealed record ChainCertificate(string Subject, string Issuer, string Sha256,
+    DateTimeOffset NotBefore, DateTimeOffset NotAfter, IReadOnlyList<string> Status)
+{
+    public string Description => $"{Subject}\nIssuer: {Issuer}\nValid from {NotBefore:u} to {NotAfter:u}\nSHA-256: {Sha256}" +
+        (Status.Count == 0 ? "" : $"\n{string.Join(", ", Status)}");
+}
+
 public sealed record SignerResult(string Name, string Issuer, string SerialNumber, string Thumbprint,
     string SignatureAlgorithm, string DigestAlgorithm, DateTimeOffset? SigningTime,
     DateTimeOffset? NotBefore, DateTimeOffset? NotAfter, Integrity Integrity,
     CertificateTrust Trust, CertificateDates Dates, Revocation Revocation, string Detail)
 {
+    public IReadOnlyList<ChainCertificate> Chain { get; init; } = [];
+    public IReadOnlyList<string> ChainStatus { get; init; } = [];
+
     public string IntegrityLabel => Integrity switch { Integrity.Valid => "VALID SIGNATURE", Integrity.Invalid => "INVALID SIGNATURE", Integrity.Unsupported => "UNSUPPORTED", _ => "NOT VERIFIED" };
     public string Summary => $"{Name} — {IntegrityLabel}";
     public string CertificateDetail => $"Issuer: {Issuer}\nSerial: {SerialNumber}\nThumbprint: {Thumbprint}\nSignature: {SignatureAlgorithm}\nDigest: {DigestAlgorithm}\nNot before: {NotBefore:u}\nNot after: {NotAfter:u}\nSigning time (untrusted assertion): {(SigningTime is null ? "Not present" : SigningTime.Value.ToString("u"))}\nRevocation: {Revocation}\n{Detail}";
@@ -28,6 +38,16 @@ public sealed record Inspection(ContainerState State, bool Detached, byte[]? Con
     public string IntegrityLabel => State switch {
         ContainerState.DetachedContentRequired => "DETACHED CONTENT REQUIRED", ContainerState.Error => "ERROR",
         ContainerState.Unsupported => "UNSUPPORTED", _ => Integrity switch { Integrity.Valid => "VALID SIGNATURE", Integrity.Invalid => "INVALID SIGNATURE", _ => "NOT VERIFIED" } };
+    public string NextStep => State == ContainerState.DetachedContentRequired
+        ? "This signature does not contain a document. Choose the exact original file supplied by the sender."
+        : State == ContainerState.Ready && Integrity == Integrity.Invalid
+            ? Detached
+                ? "Verification failed for the supplied file. Try the exact original bytes from the sender."
+                : "At least one signature failed verification. Obtain a fresh copy from the sender."
+            : State == ContainerState.Ready && Integrity == Integrity.Valid
+                ? "All signatures match the document bytes. Review certificate trust and dates separately below."
+                : Message;
+
     public string TrustLabel => Signers.Count == 0 ? "Certificate trust: UNKNOWN" :
         Signers.All(s => s.Trust == CertificateTrust.Trusted) ? "Certificate trust: TRUSTED" : "Certificate trust: UNTRUSTED / UNKNOWN";
 }
@@ -109,6 +129,8 @@ public sealed class CmsInspector(ResourceLimits? limits = null)
             catch (CryptographicException e) { integrity = Integrity.Invalid; detail = e.Message; }
         }
         var cert = signer.Certificate; var trust = CertificateTrust.Unknown; var dates = CertificateDates.Unknown;
+        IReadOnlyList<ChainCertificate> chainCertificates = [];
+        IReadOnlyList<string> chainStatus = [];
         if (cert is not null) {
             var now = DateTime.UtcNow;
             dates = now < cert.NotBefore.ToUniversalTime() ? CertificateDates.NotYetValid : now > cert.NotAfter.ToUniversalTime() ? CertificateDates.Expired : CertificateDates.Valid;
@@ -118,7 +140,15 @@ public sealed class CmsInspector(ResourceLimits? limits = null)
             chain.ChainPolicy.ExtraStore.AddRange(certificates);
             chain.ChainPolicy.VerificationFlags = X509VerificationFlags.IgnoreNotTimeValid;
             trust = chain.Build(cert) ? CertificateTrust.Trusted : CertificateTrust.Untrusted;
-            detail += "\n" + string.Join("; ", chain.ChainStatus.Select(s => s.Status.ToString()));
+            chainStatus = chain.ChainStatus.Select(s => s.Status.ToString()).ToArray();
+            chainCertificates = chain.ChainElements.Cast<X509ChainElement>().Select(element =>
+            {
+                var certificate = element.Certificate;
+                return new ChainCertificate(certificate.Subject, certificate.Issuer,
+                    certificate.GetCertHashString(HashAlgorithmName.SHA256),
+                    new DateTimeOffset(certificate.NotBefore), new DateTimeOffset(certificate.NotAfter),
+                    element.ChainElementStatus.Select(status => status.Status.ToString()).ToArray());
+            }).ToArray();
         }
         DateTimeOffset? time = null;
         foreach (CryptographicAttributeObject attribute in signer.SignedAttributes) {
@@ -133,7 +163,11 @@ public sealed class CmsInspector(ResourceLimits? limits = null)
             signer.SignatureAlgorithm.FriendlyName ?? signer.SignatureAlgorithm.Value ?? "Unknown",
             signer.DigestAlgorithm.FriendlyName ?? signer.DigestAlgorithm.Value ?? "Unknown", time,
             cert is null ? null : new DateTimeOffset(cert.NotBefore), cert is null ? null : new DateTimeOffset(cert.NotAfter),
-            integrity, trust, dates, Revocation.NotChecked, detail.Trim());
+            integrity, trust, dates, Revocation.NotChecked, detail.Trim())
+        {
+            Chain = chainCertificates,
+            ChainStatus = chainStatus
+        };
     }
     private static Inspection Error(string message) => new(ContainerState.Error, false, null, [], message);
 }
