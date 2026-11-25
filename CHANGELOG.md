@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0
+
+- Adds batch verification, detached-original suggestions, JSON verification reports, local certificate chains and next-step guidance.
+- Includes the PKCS dependency update prepared in v2.0.1.
+
 ## 2.0.1 — security maintenance (pending release)
 
 - Updates System.Security.Cryptography.Pkcs to the patched 10.0.13 version, addressing the October 2026 .NET advisories GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7.

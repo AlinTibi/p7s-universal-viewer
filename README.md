@@ -4,9 +4,9 @@ Open. Verify. Extract. Understand P7S files.
 
 P7S Universal Viewer is a free, open-source Windows utility for opening CMS/PKCS#7 signed files, extracting embedded content, verifying cryptographic signatures and inspecting signer certificates. Files are processed locally.
 
-Free and open source for Windows. **V2.0.0 is publicly released.**
+Free and open source for Windows. See the [latest public release](https://github.com/AlinTibi/p7s-universal-viewer/releases/latest).
 
-**[Download installer](https://github.com/AlinTibi/p7s-universal-viewer/releases/download/v2.0.0/P7SViewer_Setup-v2.0.0.exe)** · **[Portable ZIP](https://github.com/AlinTibi/p7s-universal-viewer/releases/download/v2.0.0/P7SUniversalViewer-v2.0.0-win-x64.zip)** · [Product page](https://almarfeld.com/software/p7s-universal-viewer/) · [Guide](https://almarfeld.com/guides/how-to-open-p7s-files-windows/)
+**[Download installer or portable ZIP](https://github.com/AlinTibi/p7s-universal-viewer/releases/latest)** · [Product page](https://almarfeld.com/software/p7s-universal-viewer/) · [Guide](https://almarfeld.com/guides/how-to-open-p7s-files-windows/)
 
 See [installation and SHA-256 verification](docs/INSTALLATION.md) before first run. The historical v1.0.0 installer remains available unchanged; its signature-list status can incorrectly display Valid for an altered payload. Do not rely on that indicator.
 
@@ -24,6 +24,12 @@ All examples use synthetic documents and demonstration certificates; no customer
 ## What is a P7S file?
 
 A P7S file usually contains a CMS/PKCS#7 signature. An attached signature includes the original document; a detached signature needs the exact original bytes supplied separately. This application supports both, with individual results for every signer.
+
+## Batch verification and reports
+
+Use **Open P7S** to select multiple files or drag up to 100 containers into the window. For detached signatures, choose the exact original supplied by the sender. If a same-folder filename matches after removing the signature extension, the picker suggests that file. The signature check uses the selected file's bytes.
+
+Choose **Save JSON report** for a single inspection or a batch. The report includes filenames, document SHA-256 where content is available, UTC check times and signer certificate details. Keep reports private if their filenames or certificate details are sensitive.
 
 ## Verification and limitations
 

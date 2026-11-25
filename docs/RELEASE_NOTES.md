@@ -1,10 +1,9 @@
-# P7S Universal Viewer v2.0.1
+# P7S Universal Viewer v2.1.0
 
-Security maintenance release for the existing P7S Universal Viewer v2 series.
+- Verify up to 100 CMS/PKCS#7 containers in one batch. Select a result to supply the exact original for a detached signature or open its detailed view.
+- When a same-folder original filename matches the signature name, the file picker suggests it for confirmation. Verification checks the selected bytes.
+- Save a JSON report for one file or a batch with document SHA-256, UTC check time and per-signer results. Reports include filenames and certificate details, without document bytes or absolute input paths.
+- View the certificate chain Windows built locally, including chain and certificate status. On-screen guidance distinguishes signature integrity from certificate trust and dates.
+- Includes the System.Security.Cryptography.Pkcs security update prepared in v2.0.1.
 
-- Updates Microsoft's `System.Security.Cryptography.Pkcs` from 10.0.12 to 10.0.13, patched for the October 2026 advisories (GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7).
-- Keeps the redesigned three-panel Windows interface, detached-content support, per-signer checks, original-byte extraction and protective handling introduced in v2.0.0.
-- Aligns the legacy GitHub Pages homepage with the canonical ALMARFELD P7S product page.
-- Includes a self-contained Windows portable ZIP and per-user installer, with SHA-256 checksum files and workflow provenance; these artifacts must be rebuilt from the v2.0.1 signed tag.
-
-This patch does not add revocation checking or timestamp authority verification. Cryptographic integrity is not proof of legal validity or content safety. WebView2 is separate and optional for PDF preview. Windows installer and EXE are not Authenticode signed. The original historical releases remain available and unchanged; use v2.0.1 instead of v2.0.0 once it is published.
+Revocation and timestamp authority tokens are not checked. The report records the application's findings and does not establish legal validity. WebView2 is optional for PDF preview and is installed separately. Windows executables and the installer are unsigned.
